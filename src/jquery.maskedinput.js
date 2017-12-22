@@ -42,7 +42,8 @@ $.fn.extend({
 			end = (typeof end === 'number') ? end : begin;
 			return this.each(function() {
 				if (this.setSelectionRange) {
-					this.setSelectionRange(begin, end);
+					if(android){setTimeout(() => this.setSelectionRange(begin, end),0);}
+					else this.setSelectionRange(begin, end);
 				} else if (this.createTextRange) {
 					range = this.createTextRange();
 					range.collapse(true);
@@ -217,7 +218,9 @@ $.fn.extend({
 					var lastEnteredValue = curVal.charAt(pos.begin);
 					if (pos.begin < len){
 						if(!tests[pos.begin]){
-							pos.begin++;
+							while(!tests[pos.begin]){
+								pos.begin++;
+							}
 							if(tests[pos.begin].test(lastEnteredValue)){
 								pos.begin++;
 							}
